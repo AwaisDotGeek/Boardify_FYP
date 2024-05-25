@@ -44,7 +44,7 @@ pipeline {
                 script {
                     def remoteDirectory = "/var/www/html"
 
-                    // Install npm dependencies and run npm build on the remote server
+                    // Install npm dependencies and run npm build on the remote server....
                     sh "ssh -o StrictHostKeyChecking=no ubuntu@16.170.210.115 'cd ${remoteDirectory} && npm install && npm run dev'"
                 }
             }
