@@ -14,7 +14,7 @@ pipeline {
                 script {
                     def remoteDirectory = "/var/www/html/boardify"
                     
-                    // Clean the remote directory before deploying
+                    // Clean the remote directory before deploying...
                     sh "ssh -o StrictHostKeyChecking=no ubuntu@16.170.210.115 'rm -rf ${remoteDirectory}'"
 
                     sshPublisher(
