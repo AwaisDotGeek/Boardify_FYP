@@ -12,7 +12,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    def remoteDirectory = "/var/www/html/boardify"
+                    def remoteDirectory = "/var/www/html"
                     
                     // Clean the remote directory before deploying...
                     sh "ssh -o StrictHostKeyChecking=no ubuntu@16.170.210.115 'rm -rf ${remoteDirectory}'"
@@ -42,7 +42,7 @@ pipeline {
         stage('Install Dependencies and Build Frontend') {
             steps {
                 script {
-                    def remoteDirectory = "/var/www/html/boardify"
+                    def remoteDirectory = "/var/www/html"
 
                     // Install npm dependencies and run npm build on the remote server
                     sh "ssh -o StrictHostKeyChecking=no ubuntu@16.170.210.115 'cd ${remoteDirectory} && npm install && npm run dev'"
@@ -53,7 +53,7 @@ pipeline {
         stage('Start Laravel Server') {
             steps {
                 script {
-                    def remoteDirectory = "/var/www/html/boardify"
+                    def remoteDirectory = "/var/www/html"
 
                     // Install composer dependencies and run the Laravel server on the remote server
                     sh "ssh -o StrictHostKeyChecking=no ubuntu@16.170.210.115 'cd ${remoteDirectory} && composer install && nohup php artisan serve --host=0.0.0.0 --port=8000 > /dev/null 2>&1 &'"
