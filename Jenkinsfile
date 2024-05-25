@@ -12,10 +12,10 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    def remoteDirectory = "/var/www/html/my-laravel-project"
+                    def remoteDirectory = "/var/www/html/boardify"
                     
                     // Clean the remote directory before deploying
-                    sh "ssh -o StrictHostKeyChecking=no ubuntu@your-server 'rm -rf ${remoteDirectory}'"
+                    sh "ssh -o StrictHostKeyChecking=no ubuntu@16.170.210.115 'rm -rf ${remoteDirectory}'"
 
                     sshPublisher(
                         publishers: [
