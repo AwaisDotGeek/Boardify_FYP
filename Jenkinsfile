@@ -13,7 +13,7 @@ pipeline {
             steps {
                 script {
                     // Install npm dependencies and run npm build on the local machine
-                    sh 'npm install'
+                    sh 'npm install --verbose'
                     sh 'npm run build'
                 }
             }
@@ -54,6 +54,14 @@ pipeline {
                             )
                         ]
                     )
+                }
+            }
+        }
+
+        stage('Start Vue Frontend') {
+            steps {
+                script {
+                    sh 'npm run dev'
                 }
             }
         }
