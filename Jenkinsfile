@@ -36,7 +36,9 @@ pipeline {
                     echo "Deploying to remote directory: ${remoteDirectory}"
 
                     // Clean the remote directory before deploying
-                    sh "ssh -o StrictHostKeyChecking=no ubuntu@16.170.210.115 'rm -rf ${remoteDirectory}/*'"
+                    sshagent(['Jenkins_SSH_Key']) {
+                        sh "ssh -o StrictHostKeyChecking=no ubuntu@16.170.210.115 'rm -rf ${remoteDirectory}/*'"
+                    }
 
                     // Print a message indicating that cleaning is complete
                     echo "Remote directory cleaned"
@@ -82,7 +84,9 @@ pipeline {
                     def remoteDirectory = "/var/www/html/boardify"
 
                     // Start the Laravel server on the remote server
-                    sh "ssh -o StrictHostKeyChecking=no ubuntu@16.170.210.115 'cd ${remoteDirectory} && nohup php artisan serve --host=0.0.0.0 --port=8000 > /dev/null 2>&1 &'"
+                    sshagent(['Jenkins_SSH_Key']) {
+                        sh "ssh -o StrictHostKeyChecking=no ubuntu@16.170.210.115 'cd ${remoteDirectory} && nohup php artisan serve --host=0.0.0.0 --port=8000 > /dev/null 2>&1 &'"
+                    }
                 }
             }
         }
