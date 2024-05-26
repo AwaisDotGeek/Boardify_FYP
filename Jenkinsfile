@@ -12,9 +12,14 @@ pipeline {
         stage('Build Frontend') {
             steps {
                 script {
-                    // Install npm dependencies and run npm build on the local machine
-                    sh 'npm install --verbose'
-                    sh 'npm run build'
+                sh 'npm install --verbose', captureOutput: true
+
+                // Capture the output of npm build
+                def buildOutput = sh script: 'npm run build', returnStdout: true
+
+                // Print the npm build output to the Jenkins console
+                echo "** npm build output: **"
+                echo buildOutput
                 }
             }
         }
