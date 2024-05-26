@@ -12,14 +12,14 @@ pipeline {
         stage('Build Frontend') {
             steps {
                 script {
-                sh 'npm install --verbose', captureOutput: true
+                    sh 'npm install --verbose'
 
-                // Capture the output of npm build
-                def buildOutput = sh script: 'npm run build', returnStdout: true
+                    // Capture the output of npm build
+                    def buildOutput = sh script: 'npm run build', returnStdout: true
 
-                // Print the npm build output to the Jenkins console
-                echo "** npm build output: **"
-                echo buildOutput
+                    // Print the npm build output to the Jenkins console
+                    echo "** npm build output: **"
+                    echo buildOutput
                 }
             }
         }
