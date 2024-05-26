@@ -21,51 +21,51 @@ pipeline {
         stage('Build Backend') {
             steps {
                 script {
-                    // Install composer dependencies on the local machine
+                    // Install composer dependencies on the local machine...
                     sh 'composer install'
                 }
             }
         }
 
         stage('Deploy') {
-    steps {
-        script {
-            def remoteDirectory = "/var/www/html"
+            steps {
+                script {
+                    def remoteDirectory = "/var/www/html"
 
-            // Print a message indicating that deployment is starting
-            echo "Deploying to remote directory: ${remoteDirectory}"
+                    // Print a message indicating that deployment is starting
+                    echo "Deploying to remote directory: ${remoteDirectory}"
 
-            // Clean the remote directory before deploying
-            sh "ssh -o StrictHostKeyChecking=no ubuntu@16.170.210.115 'rm -rf ${remoteDirectory}/*'"
+                    // Clean the remote directory before deploying
+                    sh "ssh -o StrictHostKeyChecking=no ubuntu@16.170.210.115 'rm -rf ${remoteDirectory}/*'"
 
-            // Print a message indicating that cleaning is complete
-            echo "Remote directory cleaned"
+                    // Print a message indicating that cleaning is complete
+                    echo "Remote directory cleaned"
 
-            // Deploy files using sshPublisher
-            sshPublisher(
-                publishers: [
-                    sshPublisherDesc(
-                        configName: 'ApacheServer', // Replace with your actual SSH server configuration name
-                        transfers: [
-                            sshTransfer(
-                                sourceFiles: '**/*',
-                                remoteDirectory: remoteDirectory,
-                                removePrefix: '',
-                                execCommand: ''
+                    // Deploy files using sshPublisher
+                    sshPublisher(
+                        publishers: [
+                            sshPublisherDesc(
+                                configName: 'ApacheServer', // Replace with your actual SSH server configuration name
+                                transfers: [
+                                    sshTransfer(
+                                        sourceFiles: '**/*',
+                                        remoteDirectory: remoteDirectory,
+                                        removePrefix: '',
+                                        execCommand: ''
+                                    )
+                                ],
+                                usePromotionTimestamp: false,
+                                useWorkspaceInPromotion: false,
+                                verbose: true
                             )
-                        ],
-                        usePromotionTimestamp: false,
-                        useWorkspaceInPromotion: false,
-                        verbose: true
+                        ]
                     )
-                ]
-            )
 
-            // Print a message indicating that deployment is complete
-            echo "Deployment completed"
+                    // Print a message indicating that deployment is complete
+                    echo "Deployment completed"
+                }
+            }
         }
-    }
-}
 
 
         stage('Start Vue Frontend') {
