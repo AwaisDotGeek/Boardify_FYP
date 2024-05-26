@@ -30,7 +30,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    def remoteDirectory = "/var/www/html"
+                    def remoteDirectory = "/var/www/html/boardify"
 
                     // Print a message indicating that deployment is starting
                     echo "Deploying to remote directory: ${remoteDirectory}"
@@ -79,7 +79,7 @@ pipeline {
         stage('Start Laravel Server') {
             steps {
                 script {
-                    def remoteDirectory = "/var/www/html"
+                    def remoteDirectory = "/var/www/html/boardify"
 
                     // Start the Laravel server on the remote server
                     sh "ssh -o StrictHostKeyChecking=no ubuntu@16.170.210.115 'cd ${remoteDirectory} && nohup php artisan serve --host=0.0.0.0 --port=8000 > /dev/null 2>&1 &'"
