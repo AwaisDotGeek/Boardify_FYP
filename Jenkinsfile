@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Checkout the code from the Git repository.....
+                // Checkout the code from the Git repository
                 checkout scm
             }
         }
@@ -21,7 +21,7 @@ pipeline {
         stage('Build Backend') {
             steps {
                 script {
-                    // Install composer dependencies on the local machine...
+                    // Install composer dependencies on the local machine
                     sh 'composer install'
                 }
             }
@@ -35,33 +35,17 @@ pipeline {
                     // Print a message indicating that deployment is starting
                     echo "Deploying to remote directory: ${remoteDirectory}"
 
-                    // Clean the remote directory before deploying
+                    // Use sshagent to provide SSH key for the session
                     sshagent(['Jenkins_SSH_Key']) {
+                        // Clean the remote directory before deploying
                         sh "ssh -o StrictHostKeyChecking=no ubuntu@16.170.210.115 'rm -rf ${remoteDirectory}/*'"
+
+                        // Print a message indicating that cleaning is complete
+                        echo "Remote directory cleaned"
+
+                        // Deploy files using scp
+                        sh "scp -o StrictHostKeyChecking=no -r * ubuntu@16.170.210.115:${remoteDirectory}"
                     }
-
-                    // Print a message indicating that cleaning is complete
-                    echo "Remote directory cleaned"
-
-                    // Deploy files using sshPublisher
-                    sshPublisher(
-                        publishers: [
-                            sshPublisherDesc(
-                                configName: 'ApacheServer', // Replace with your actual SSH server configuration name
-                                transfers: [
-                                    sshTransfer(
-                                        sourceFiles: '**/*',
-                                        remoteDirectory: remoteDirectory,
-                                        removePrefix: '',
-                                        execCommand: ''
-                                    )
-                                ],
-                                usePromotionTimestamp: false,
-                                useWorkspaceInPromotion: false,
-                                verbose: true
-                            )
-                        ]
-                    )
 
                     // Print a message indicating that deployment is complete
                     echo "Deployment completed"
@@ -69,10 +53,10 @@ pipeline {
             }
         }
 
-
         stage('Start Vue Frontend') {
             steps {
                 script {
+                    // Start the Vue frontend development server
                     sh 'npm run dev'
                 }
             }
