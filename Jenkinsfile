@@ -14,6 +14,7 @@ pipeline {
                 script {
                     // Install npm dependencies and run npm build on the local machine
                     sh 'npm install --verbose'
+                    sh 'npm run build'
                 }
             }
         }
@@ -49,15 +50,6 @@ pipeline {
 
                     // Print a message indicating that deployment is complete
                     echo "Deployment completed"
-                }
-            }
-        }
-
-        stage('Start Vue Frontend') {
-            steps {
-                script {
-                    // Start the Vue frontend development server
-                    sh 'npm run dev'
                 }
             }
         }
