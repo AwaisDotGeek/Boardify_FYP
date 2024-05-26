@@ -9,13 +9,32 @@ pipeline {
             }
         }
 
+        stage('Build Frontend') {
+            steps {
+                script {
+                    // Install npm dependencies and run npm build on the local machine
+                    sh 'npm install'
+                    sh 'npm run build'
+                }
+            }
+        }
+
+        stage('Build Backend') {
+            steps {
+                script {
+                    // Install composer dependencies on the local machine
+                    sh 'composer install'
+                }
+            }
+        }
+
         stage('Deploy') {
             steps {
                 script {
                     def remoteDirectory = "/var/www/html"
-                    
-                    // Clean the remote directory before deploying...
-                    sh "ssh -o StrictHostKeyChecking=no ubuntu@16.170.210.115 'rm -rf ${remoteDirectory}'"
+
+                    // Clean the remote directory before deploying
+                    sh "ssh -o StrictHostKeyChecking=no ubuntu@16.170.210.115 'rm -rf ${remoteDirectory}/*'"
 
                     sshPublisher(
                         publishers: [
@@ -39,24 +58,13 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies and Build Frontend') {
-            steps {
-                script {
-                    def remoteDirectory = "/var/www/html"
-
-                    // Install npm dependencies and run npm build on the remote server....
-                    sh "ssh -o StrictHostKeyChecking=no ubuntu@16.170.210.115 'cd ${remoteDirectory} && npm install && npm run dev'"
-                }
-            }
-        }
-
         stage('Start Laravel Server') {
             steps {
                 script {
                     def remoteDirectory = "/var/www/html"
 
-                    // Install composer dependencies and run the Laravel server on the remote server
-                    sh "ssh -o StrictHostKeyChecking=no ubuntu@16.170.210.115 'cd ${remoteDirectory} && composer install && nohup php artisan serve --host=0.0.0.0 --port=8000 > /dev/null 2>&1 &'"
+                    // Start the Laravel server on the remote server
+                    sh "ssh -o StrictHostKeyChecking=no ubuntu@16.170.210.115 'cd ${remoteDirectory} && nohup php artisan serve --host=0.0.0.0 --port=8000 > /dev/null 2>&1 &'"
                 }
             }
         }
