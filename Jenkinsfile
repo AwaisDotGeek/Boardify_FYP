@@ -14,7 +14,6 @@ pipeline {
                 script {
                     // Install npm dependencies and run npm build on the local machine
                     sh 'npm install --verbose'
-                    sh 'npm run build'
                 }
             }
         }
